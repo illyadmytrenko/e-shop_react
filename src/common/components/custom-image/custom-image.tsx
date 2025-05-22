@@ -26,6 +26,8 @@ export function CustomImage({
         alt={alt}
         src={src}
         style={{ objectFit: "cover", width: "100%", height: "100%" }}
+        width={width}
+        height={height}
       />
     </div>
   );
