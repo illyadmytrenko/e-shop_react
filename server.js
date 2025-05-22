@@ -22,6 +22,12 @@ dotenv.config();
 
 console.log("API_KEY:", process.env.VITE_OPENAI_API_KEY);
 
+console.log("API_KEY:", process.env.VITE_MYSQLPORT);
+console.log("API_KEY:", process.env.VITE_MYSQLUSER);
+console.log("API_KEY:", process.env.VITE_MYSQLPASSWORD);
+console.log("API_KEY:", process.env.VITE_MYSQLDATABASE);
+console.log("API_KEY:", process.env.VITE_MYSQLHOST);
+
 const openai = new OpenAI({
   apiKey: process.env["VITE_OPENAI_API_KEY"],
 });
