@@ -878,7 +878,6 @@ app.post("/cart/create-checkout-session", async (req, res) => {
         quantity: 1,
       }
     );
-    git;
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
