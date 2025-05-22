@@ -28,7 +28,7 @@ export default function CartSuccess() {
     cartSlice.selectors.selectPaymentUserInfo(state, userInfo?.userId ?? 0)
   );
 
-  console.log(paymentUserInfoFromStore)
+  console.log(paymentUserInfoFromStore);
 
   const chosenProductsIds: string[] = useAppSelector((state) =>
     userInfo
@@ -140,7 +140,7 @@ export default function CartSuccess() {
               : 22.5;
 
           const response = await fetch(
-            "e-shopreact-production-3eb1.up.railway.app/user/add-bonus",
+            "https://e-shopreact-production-3eb1.up.railway.app/user/add-bonus",
             {
               method: "POST",
               headers: {
