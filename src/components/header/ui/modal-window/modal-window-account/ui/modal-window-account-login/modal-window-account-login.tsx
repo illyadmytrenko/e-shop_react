@@ -5,10 +5,7 @@ import type { AlertColor } from "@mui/material/Alert";
 import { useModal } from "@/common/context/modal-context";
 import { useAppDispatch } from "@/common/shared/redux";
 import { useValidation } from "@/common/functions/useValidate";
-import {
-  setUserInfo,
-  setUserInfoError,
-} from "@/modules/users/user-info.slice";
+import { setUserInfo, setUserInfoError } from "@/modules/users/user-info.slice";
 import { ModalWindowAccountLoginLayout } from "./ui/modal-window-account-login-layout";
 import clsx from "clsx";
 
@@ -68,11 +65,14 @@ export function ModalWindowAccountLogin({
         return;
 
       try {
-        const response = await fetch("http://localhost:5000/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
+        const response = await fetch(
+          "https://e-shopreact-production-3eb1.up.railway.app/login",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          }
+        );
         if (response.status === 404)
           return setFormDataErrors([
             "Email not found. Please register or check your email address.",

@@ -20,7 +20,7 @@ export function CommentComp({ comment }: CommentCompProps) {
     const fetchUserName = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/user/${comment.userId}`
+          `https://e-shopreact-production-3eb1.up.railway.app/user/${comment.userId}`
         );
         if (response.ok) {
           const user = await response.json();
@@ -41,7 +41,7 @@ export function CommentComp({ comment }: CommentCompProps) {
     async (commentId: number, action: string): Promise<void> => {
       try {
         const response = await fetch(
-          `http://localhost:5000/update-comment/${commentId}`,
+          `https://e-shopreact-production-3eb1.up.railway.app/update-comment/${commentId}`,
           {
             method: "POST",
             headers: {

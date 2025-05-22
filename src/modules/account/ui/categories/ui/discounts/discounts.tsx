@@ -55,7 +55,7 @@ export default function Discounts({ userInfo, userDiscount }: PageProps) {
               break;
           }
           const response = await fetch(
-            "http://localhost:5000/user/user-discount",
+            "https://e-shopreact-production-3eb1.up.railway.app/user/user-discount",
             {
               method: "POST",
               headers: {

@@ -41,33 +41,39 @@ export function Comments({
     }
 
     try {
-      const response = await fetch("http://localhost:5000/comment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          productId,
-          comment,
-          commentRating: rating,
-        }),
-      });
+      const response = await fetch(
+        "https://e-shopreact-production-3eb1.up.railway.app/comment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            productId,
+            comment,
+            commentRating: rating,
+          }),
+        }
+      );
 
       if (response.ok) {
         showAlert("Comment successfully left!");
         setComment("");
         setRating(0);
 
-        await fetch(`http://localhost:5000/update-products/${productId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            commentRating: rating,
-          }),
-        });
+        await fetch(
+          `https://e-shopreact-production-3eb1.up.railway.app/update-products/${productId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              commentRating: rating,
+            }),
+          }
+        );
 
         if (typeof window !== "undefined") {
           window.location.reload();

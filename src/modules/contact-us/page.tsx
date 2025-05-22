@@ -64,7 +64,7 @@ export default function ContactUs() {
         };
 
         const response = await fetch(
-          "http://localhost:5000/contact-us/submit",
+          "https://e-shopreact-production-3eb1.up.railway.app/contact-us/submit",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

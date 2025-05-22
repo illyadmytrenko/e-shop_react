@@ -6,10 +6,7 @@ import { useModal } from "@/common/context/modal-context";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/common/shared/redux";
 import { useValidation } from "@/common/functions/useValidate";
-import {
-  setUserInfo,
-  setUserInfoError,
-} from "@/modules/users/user-info.slice";
+import { setUserInfo, setUserInfoError } from "@/modules/users/user-info.slice";
 import { ModalWindowAccountRegisterLayout } from "./ui/modal-window-account-register-layout";
 import clsx from "clsx";
 
@@ -92,13 +89,16 @@ export function ModalWindowAccountRegister({
         return;
 
       try {
-        const response = await fetch("http://localhost:5000/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        const response = await fetch(
+          "https://e-shopreact-production-3eb1.up.railway.app/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
 
         if (response.status === 409) {
           setFormDataErrors((prevErrors) => [

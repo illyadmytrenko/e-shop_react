@@ -47,7 +47,7 @@ export function OrdersStatsChart() {
       for (const week of weeks) {
         try {
           const res = await fetch(
-            `http://localhost:5000/orders/stats?year=${year}&month=${month}&week=${week}`
+            `https://e-shopreact-production-3eb1.up.railway.app/orders/stats?year=${year}&month=${month}&week=${week}`
           );
 
           if (!res.ok) throw new Error("Ошибка запроса");

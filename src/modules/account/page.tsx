@@ -78,7 +78,7 @@ export default function Account() {
     }
 
     try {
-      await fetch("http://localhost:5000/delete-user", {
+      await fetch("https://e-shopreact-production-3eb1.up.railway.app/delete-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: userInfo?.userId }),
@@ -138,7 +138,7 @@ export default function Account() {
       modalWindowOptions.inputValues;
 
     try {
-      const response = await fetch("http://localhost:5000/user-info/password", {
+      const response = await fetch("https://e-shopreact-production-3eb1.up.railway.app/user-info/password", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -189,7 +189,7 @@ export default function Account() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/user-info", {
+      const response = await fetch("https://e-shopreact-production-3eb1.up.railway.app/user-info", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUserInfo),

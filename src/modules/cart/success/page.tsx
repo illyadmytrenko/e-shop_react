@@ -59,7 +59,7 @@ export default function CartSuccess() {
       const saveOrderData = async () => {
         try {
           const response = await fetch(
-            "http://localhost:5000/cart/save-order",
+            "https://e-shopreact-production-3eb1.up.railway.app/cart/save-order",
             {
               method: "POST",
               headers: {
@@ -89,7 +89,7 @@ export default function CartSuccess() {
           const removeDiscount = async () => {
             try {
               const discountResponse = await fetch(
-                "http://localhost:5000/user/remove-discount",
+                "https://e-shopreact-production-3eb1.up.railway.app/user/remove-discount",
                 {
                   method: "POST",
                   headers: {
@@ -137,22 +137,25 @@ export default function CartSuccess() {
               ? 7.5
               : 22.5;
 
-          const response = await fetch("http://localhost:5000/user/add-bonus", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+          const response = await fetch(
+            "e-shopreact-production-3eb1.up.railway.app/user/add-bonus",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
 
-            body: JSON.stringify({
-              userId: userInfo?.userId ?? 0,
-              bonusPoints: Math.ceil(
-                (1 - paymentUserInfoFromStore.discount * 0.01) *
-                  Number(subtotal) +
-                  Number(serviseCommission) +
-                  shipmentCost
-              ),
-            }),
-          });
+              body: JSON.stringify({
+                userId: userInfo?.userId ?? 0,
+                bonusPoints: Math.ceil(
+                  (1 - paymentUserInfoFromStore.discount * 0.01) *
+                    Number(subtotal) +
+                    Number(serviseCommission) +
+                    shipmentCost
+                ),
+              }),
+            }
+          );
 
           if (response.status === 500) {
             console.error("Server error: 500. Bonus adding aborted.");

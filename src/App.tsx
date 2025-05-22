@@ -19,13 +19,16 @@ export default function RootLayout() {
   }, []);
 
   const makeRequestToChatGPT = async (message: string) => {
-    const response = await fetch("http://localhost:5000/message", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message }),
-    });
+    const response = await fetch(
+      "https://e-shopreact-production-3eb1.up.railway.app/message",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      }
+    );
 
     return response.json();
   };
