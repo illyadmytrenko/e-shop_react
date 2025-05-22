@@ -815,22 +815,25 @@ app.delete("/account/orders/:id", async (req, res) => {
 });
 
 app.post("/cart/create-checkout-session", async (req, res) => {
-  const { productsWithQuantity, discount, shippingMethod, serviseCommission } =
-    req.body;
+  try {
+    const {
+      productsWithQuantity,
+      discount,
+      shippingMethod,
+      serviseCommission,
+    } = req.body;
 
-  const maxDiscountAmount = 2000;
-  const totalAmount = productsWithQuantity.reduce((sum, product) => {
-    return sum + product.price * product.quantity;
-  }, 0);
-  const discountAmount = (discount / 100) * totalAmount;
-  const finalDiscountAmount =
-    discountAmount > maxDiscountAmount ? maxDiscountAmount : discountAmount;
+    const maxDiscountAmount = 2000;
+    const totalAmount = productsWithQuantity.reduce((sum, product) => {
+      return sum + product.price * product.quantity;
+    }, 0);
+    const discountAmount = (discount / 100) * totalAmount;
+    const finalDiscountAmount = Math.min(discountAmount, maxDiscountAmount);
 
-  const shipmentCost =
-    shippingMethod === "free" ? 0 : shippingMethod === "regular" ? 7.5 : 22.5;
+    const shipmentCost =
+      shippingMethod === "free" ? 0 : shippingMethod === "regular" ? 7.5 : 22.5;
 
-  const lineItems = productsWithQuantity.map((product) => {
-    return {
+    const lineItems = productsWithQuantity.map((product) => ({
       price_data: {
         currency: "usd",
         product_data: {
@@ -843,41 +846,44 @@ app.post("/cart/create-checkout-session", async (req, res) => {
         ),
       },
       quantity: product.quantity,
-    };
-  });
+    }));
 
-  lineItems.push(
-    {
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: "Shipping",
+    lineItems.push(
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Shipping",
+          },
+          unit_amount: Math.floor(shipmentCost * 100),
         },
-        unit_amount: Math.floor(shipmentCost * 100),
+        quantity: 1,
       },
-      quantity: 1,
-    },
-    {
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: "Service Comission",
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Service Commission",
+          },
+          unit_amount: Math.floor(serviseCommission * 100),
         },
-        unit_amount: Math.floor(serviseCommission * 100),
-      },
-      quantity: 1,
-    }
-  );
+        quantity: 1,
+      }
+    );
 
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: lineItems,
-    mode: "payment",
-    success_url: `http://localhost:3000/cart/success?session_id={CHECKOUT_SESSION_ID}&subtotal=${totalAmount}&serviseCommission=${serviseCommission}`,
-    cancel_url: "http://localhost:3000/cart/error",
-  });
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      mode: "payment",
+      success_url: `https://rainbow-duckanoo-f31b80.netlify.app/cart/success?session_id={CHECKOUT_SESSION_ID}&subtotal=${totalAmount}&serviseCommission=${serviseCommission}`,
+      cancel_url: "https://rainbow-duckanoo-f31b80.netlify.app/cart/error",
+    });
 
-  res.json({ id: session.id });
+    res.json({ id: session.id });
+  } catch (error) {
+    console.error("Stripe error:", error);
+    res.status(500).json({ error: "Failed to create checkout session" });
+  }
 });
 
 app.post("/cart/save-order", async (req, res) => {
