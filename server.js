@@ -16,19 +16,19 @@ import bcrypt from "bcryptjs";
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// app.use(
-//   cors({
-//     origin: "https://rainbow-duckanoo-f31b80.netlify.app",
-//     credentials: true,
-//   })
-// );
-
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://rainbow-duckanoo-f31b80.netlify.app",
     credentials: true,
   })
 );
+
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//   })
+// );
 
 app.use(express.json());
 
