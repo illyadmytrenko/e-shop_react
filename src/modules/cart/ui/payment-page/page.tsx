@@ -59,6 +59,7 @@ export function PaymentPage({
       );
       const response = await fetch(
         "https://e-shopreact-production-3eb1.up.railway.app/cart/create-checkout-session",
+        // "https://localhost:5000/cart/create-checkout-session",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -70,6 +71,7 @@ export function PaymentPage({
         }
       );
       const session = await response.json();
+      console.log(session);
       console.log("Response status:", response.status);
       console.log("Response body:", await response.text());
       await stripe?.redirectToCheckout({ sessionId: session.id });

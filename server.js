@@ -878,7 +878,7 @@ app.post("/cart/create-checkout-session", async (req, res) => {
         quantity: 1,
       }
     );
-
+    git;
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
@@ -886,6 +886,8 @@ app.post("/cart/create-checkout-session", async (req, res) => {
       success_url: `https://rainbow-duckanoo-f31b80.netlify.app/cart/success?session_id={CHECKOUT_SESSION_ID}&subtotal=${totalAmount}&serviseCommission=${serviseCommission}`,
       cancel_url: "https://rainbow-duckanoo-f31b80.netlify.app/cart/error",
     });
+
+    console.log("Stripe session created:", session);
 
     res.json({ id: session.id });
   } catch (error) {
