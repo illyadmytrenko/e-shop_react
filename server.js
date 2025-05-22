@@ -20,16 +20,16 @@ app.use(express.json());
 
 dotenv.config();
 
-console.log("API_KEY:", process.env.VITE_OPENAI_API_KEY);
+console.log("API_KEY:", process.env.OPENAI_API_KEY);
 
-console.log("API_KEY:", process.env.VITE_MYSQLPORT);
-console.log("API_KEY:", process.env.VITE_MYSQLUSER);
-console.log("API_KEY:", process.env.VITE_MYSQLPASSWORD);
-console.log("API_KEY:", process.env.VITE_MYSQLDATABASE);
-console.log("API_KEY:", process.env.VITE_MYSQLHOST);
+console.log("API_KEY:", process.env.MYSQLPORT);
+console.log("API_KEY:", process.env.MYSQLUSER);
+console.log("API_KEY:", process.env.MYSQLPASSWORD);
+console.log("API_KEY:", process.env.MYSQLDATABASE);
+console.log("API_KEY:", process.env.MYSQLHOST);
 
 const openai = new OpenAI({
-  apiKey: process.env["VITE_OPENAI_API_KEY"],
+  apiKey: process.env["OPENAI_API_KEY"],
 });
 
 app.get("/products", async (req, res) => {
