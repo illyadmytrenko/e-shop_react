@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = "https://e-shop-react-ehp2.onrender.com";
+const baseUrl = "https://e-shopreact-production.up.railway.app";
 
 export const baseApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
