@@ -1,0 +1,277 @@
+"use client";
+
+import { Product } from "@/common/types/product";
+import { productsApi, productsCharacteristicsApi } from "../products/api";
+import { UserInfo } from "@/common/types/user-info";
+import { Order } from "@/common/types/order";
+import { useEffect, useState, useRef } from "react";
+import { ordersApi } from "../account/api";
+import { userApi } from "../users/api";
+import { ProductsSection } from "./ui/products-section";
+import { UsersSection } from "./ui/users-section";
+import { OrdersSection } from "./ui/orders-section";
+import { OrdersStatsChart } from "./ui/orders-stats-chart";
+import { MoneyAmountStatsChart } from "./ui/money-amount-stats-chart";
+
+export default function AdminPage() {
+  const { data: products, isLoading: productsLoading } =
+    productsApi.useGetProductsQuery();
+  const { isLoading: characteristicsLoading } =
+    productsCharacteristicsApi.useGetCharacteristicsQuery();
+
+  const { data: users, isLoading: usersLoading } = userApi.useGetUsersQuery();
+
+  const { data: orders, isLoading: ordersLoading } =
+    ordersApi.useGetAllOrdersQuery();
+
+  const isLoading =
+    productsLoading || characteristicsLoading || ordersLoading || usersLoading;
+
+  const [createProduct] = productsApi.useAddProductMutation();
+  const [updateProduct] = productsApi.useUpdateProductMutation();
+  const [deleteProduct] = productsApi.useDeleteProductMutation();
+
+  const [updateUser] = userApi.useUpdateUserMutation();
+  const [deleteUser] = userApi.useDeleteUserMutation();
+
+  const [updateOrder] = ordersApi.useUpdateOrderMutation();
+  const [deleteOrder] = ordersApi.useDeleteOrderMutation();
+
+  const [maxId, setMaxId] = useState<number>(0);
+
+  useEffect(() => {
+    setMaxId(
+      products?.reduce((max, product) => Math.max(max, product.id), 0) ?? 0
+    );
+  }, [products]);
+
+  useEffect(() => {
+    setNewProduct((prev) => ({
+      ...prev,
+      id: maxId + 1,
+    }));
+  }, [maxId]);
+
+  const [editedProducts, setEditedProducts] = useState<{
+    [key: number]: Product;
+  }>({});
+  const [newProduct, setNewProduct] = useState<Product>({
+    id: maxId + 1,
+    name: "",
+    description: "",
+    price: 0,
+    category: "",
+    brand: "",
+    releaseDate: "",
+    rating: 0,
+    sellsAmount: 0,
+    color: "",
+    image: "",
+  });
+
+  const [editedUsers, setEditedUsers] = useState<{
+    [key: number]: UserInfo;
+  }>({});
+
+  const [editedOrders, setEditedOrders] = useState<{
+    [key: number]: Order;
+  }>({});
+
+  const handleChangeProducts = (
+    id: number,
+    field: keyof Product | keyof Order | keyof UserInfo,
+    value: string | number
+  ) => {
+    setEditedProducts((prev) => ({
+      ...prev,
+      [id]: {
+        ...products?.find((p) => p.id === id),
+        ...prev[id],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleChangeUsers = (
+    id: number,
+    field: keyof Product | keyof Order | keyof UserInfo,
+    value: string | number
+  ) => {
+    setEditedUsers((prev) => ({
+      ...prev,
+      [id]: {
+        ...users?.find((user) => user.userId === id),
+        ...prev[id],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleChangeOrders = (
+    id: number,
+    field: keyof Product | keyof Order | keyof UserInfo,
+    value: string | number
+  ) => {
+    setEditedOrders((prev) => ({
+      ...prev,
+      [id]: {
+        ...orders?.find((order) => Number(order.orderId) === id),
+        ...prev[id],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleSaveProduct = async (id: number) => {
+    if (!editedProducts[id]) return;
+
+    await updateProduct({ id, data: editedProducts[id] });
+    setEditedProducts((prev) => {
+      const updatedState = { ...prev };
+      delete updatedState[id];
+      return updatedState;
+    });
+  };
+
+  const handleSaveUser = async (id: number) => {
+    if (!editedUsers[id]) return;
+
+    await updateUser({ id, data: editedUsers[id] });
+    setEditedUsers((prev) => {
+      const updatedState = { ...prev };
+      delete updatedState[id];
+      return updatedState;
+    });
+  };
+
+  const handleSaveOrder = async (id: number) => {
+    if (!editedOrders[id]) return;
+
+    await updateOrder({ id, data: editedOrders[id] });
+    setEditedOrders((prev) => {
+      const updatedState = { ...prev };
+      delete updatedState[id];
+      return updatedState;
+    });
+  };
+
+  const handleNewChangeProducts = (
+    field: keyof Product | keyof Order | keyof UserInfo,
+    value: string | number
+  ) => {
+    setNewProduct((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleAddProduct = async () => {
+    if (!newProduct.name || !newProduct.price) {
+      alert("Название и цена обязательны!");
+      return;
+    }
+
+    try {
+      await createProduct(newProduct).unwrap();
+      setNewProduct({
+        id: maxId + 1,
+        name: "",
+        description: "",
+        price: 0,
+        category: "",
+        brand: "",
+        releaseDate: "",
+        rating: 0,
+        sellsAmount: 0,
+        color: "",
+        image: "",
+      });
+    } catch (error) {
+      console.error("Ошибка при добавлении товара:", error);
+    }
+  };
+
+  const productsSectionRef = useRef<HTMLDivElement>(null);
+  const usersSectionRef = useRef<HTMLDivElement>(null);
+  const ordersSectionRef = useRef<HTMLDivElement>(null);
+  const statsSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
+    <div className="mt-5 sm:mt-8 lg:mt-12">
+      <div
+        className="flex flex-col md:flex-row gap-4 md:gap-6 mb-10 text-lg relative after:absolute after:w-[2px] md:after:w-full
+        after:h-full md:after:h-[2px] after:bg-gray-500 after:-bottom-2"
+      >
+        <span
+          className="cursor-pointer hover:text-blue-500 relative after:absolute after:bg-blue-500 after:h-full md:after:h-[2px] hover:after:w-[2px] md:hover:after:w-full
+          after:left-0 after:-bottom-2 after:z-20 px-2"
+          onClick={() => scrollToSection(productsSectionRef)}
+        >
+          Products Section
+        </span>
+        <span
+          className="cursor-pointer hover:text-blue-500 relative after:absolute after:bg-blue-500 after:h-full md:after:h-[2px] hover:after:w-[2px] md:hover:after:w-full
+          after:left-0 after:-bottom-2 after:z-20 px-2"
+          onClick={() => scrollToSection(usersSectionRef)}
+        >
+          Users Section
+        </span>
+        <span
+          className="cursor-pointer hover:text-blue-500 relative after:absolute after:bg-blue-500 after:h-full md:after:h-[2px] hover:after:w-[2px] md:hover:after:w-full
+          after:left-0 after:-bottom-2 after:z-20 px-2"
+          onClick={() => scrollToSection(ordersSectionRef)}
+        >
+          Orders Section
+        </span>
+        <span
+          className="cursor-pointer hover:text-blue-500 relative after:absolute after:bg-blue-500 after:h-full md:after:h-[2px] hover:after:w-[2px] md:hover:after:w-full
+          after:left-0 after:-bottom-2 after:z-20 px-2"
+          onClick={() => scrollToSection(statsSectionRef)}
+        >
+          E-shop Statistics
+        </span>
+      </div>
+      <div className="flex flex-col gap-8">
+        <ProductsSection
+          productsSectionRef={productsSectionRef}
+          products={products}
+          editedProducts={editedProducts}
+          handleChange={handleChangeProducts}
+          handleNewChange={handleNewChangeProducts}
+          newProduct={newProduct}
+          handleAddProduct={handleAddProduct}
+          handleSave={handleSaveProduct}
+          deleteProduct={deleteProduct}
+        />
+        <UsersSection
+          usersSectionRef={usersSectionRef}
+          users={users}
+          editedUsers={editedUsers}
+          handleChange={handleChangeUsers}
+          handleSave={handleSaveUser}
+          deleteUser={deleteUser}
+        />
+        <OrdersSection
+          ordersSectionRef={ordersSectionRef}
+          orders={orders}
+          editedOrders={editedOrders}
+          handleChange={handleChangeOrders}
+          handleSave={handleSaveOrder}
+          deleteOrder={deleteOrder}
+        />
+        <div ref={statsSectionRef} className="flex flex-col gap-8">
+          <OrdersStatsChart />
+          <MoneyAmountStatsChart />
+        </div>
+      </div>
+    </div>
+  );
+}
