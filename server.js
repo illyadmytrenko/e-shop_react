@@ -14,7 +14,7 @@ const app = express();
 import bcrypt from "bcryptjs";
 
 import Stripe from "stripe";
-const stripe = new Stripe("process.env.STRIPE_SECRET_KEY");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.use(
   cors({
