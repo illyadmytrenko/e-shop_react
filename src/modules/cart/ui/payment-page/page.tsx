@@ -95,7 +95,7 @@ export function PaymentPage({
         height={100}
         className="flex justify-center my-5 md:my-10"
       />
-      <div className="flex gap-8">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
         <div className="flex-1">
           <div className="rounded-md border-2 border-solid border-gray-300 p-6 flex flex-col gap-8 mb-4">
             <div>

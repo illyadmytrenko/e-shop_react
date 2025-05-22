@@ -95,7 +95,7 @@ export default function RootLayout() {
                   />
                 </CustomButton>
               ) : (
-                <div className="fixed bottom-4 left-4 right-4 md:left-4 md:w-80 p-4 bg-white shadow-lg rounded-lg">
+                <div className="fixed bottom-4 left-4 right-4 md:left-4 md:w-80 p-4 bg-white shadow-lg rounded-lg z-20">
                   <div className="flex justify-between items-center gap-5 mb-3">
                     <h3 className="font-bold text-lg">Ask ChatGPT</h3>
                     <CustomButton onClick={toggleModalChat}>
