@@ -58,7 +58,7 @@ export function PaymentPage({
         "pk_test_51QjLIuCQUfncnbXmuEi3YPCMxkpG50R5w0bwNPA4kXYqaL1PUWG6dwHS0QVQV4jEe45Lors1y1w3kv3nKc3oAePy00LGESbxqt"
       );
       const response = await fetch(
-        "http://localhost:5000/cart/create-checkout-session",
+        "https://e-shopreact-production-3eb1.up.railway.app/cart/create-checkout-session",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
