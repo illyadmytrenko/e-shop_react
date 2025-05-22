@@ -73,7 +73,6 @@ export function PaymentPage({
       const session = await response.json();
       console.log(session);
       console.log("Response status:", response.status);
-      console.log("Response body:", await response.text());
       await stripe?.redirectToCheckout({ sessionId: session.id });
     } catch (error) {
       console.error("Error during checkout:", error);
