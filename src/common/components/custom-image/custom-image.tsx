@@ -25,7 +25,13 @@ export function CustomImage({
       <img
         alt={alt}
         src={src}
-        style={{ objectFit: "cover", width: "100%", height: "100%" }}
+        style={{
+          objectFit: "cover",
+          width: "100%",
+          height: "100%",
+          maxWidth: width,
+          maxHeight: height,
+        }}
         width={width}
         height={height}
       />
