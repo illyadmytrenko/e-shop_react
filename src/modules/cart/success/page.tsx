@@ -28,6 +28,8 @@ export default function CartSuccess() {
     cartSlice.selectors.selectPaymentUserInfo(state, userInfo?.userId ?? 0)
   );
 
+  console.log(paymentUserInfoFromStore)
+
   const chosenProductsIds: string[] = useAppSelector((state) =>
     userInfo
       ? productsSlice.selectors.selectChosenProductsIds(state, userInfo.userId)
