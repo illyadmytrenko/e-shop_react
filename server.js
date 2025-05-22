@@ -15,7 +15,13 @@ import bcrypt from "bcryptjs";
 
 import stripe from "stripe";
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://rainbow-duckanoo-f31b80.netlify.app",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 dotenv.config();
