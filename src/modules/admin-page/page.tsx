@@ -254,7 +254,6 @@ export default function AdminPage() {
 
   const handleAddProduct = async () => {
     try {
-      console.log(newProduct);
       await createProduct(newProduct);
       if (newProduct.characteristics) {
         await createCharacteristics({

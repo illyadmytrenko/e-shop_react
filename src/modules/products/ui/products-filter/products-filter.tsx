@@ -40,8 +40,6 @@ export function ProductsFilter({
     [selectedCategory]
   );
 
-  console.log(filterCategory);
-
   const getCounts = useCallback(
     (property: string): Record<string, number> => {
       const productIds = new Set(products.map((product) => product.id));
