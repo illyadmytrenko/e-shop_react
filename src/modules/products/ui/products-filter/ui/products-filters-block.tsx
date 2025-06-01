@@ -65,6 +65,7 @@ export function ProductsFiltersBlock({
     }
   };
 
+
   return (
     <div className="mb-6 mt-2 relative after:absolute after:w-full after:h-[1px] after:bg-gray-300 after:-bottom-3">
       <div

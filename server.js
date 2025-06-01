@@ -181,6 +181,34 @@ app.get("/characteristics", async (req, res) => {
   }
 });
 
+app.put("/characteristics/:id", async (req, res) => {
+  const { char1, char2, char3, char4, char5, char6, char7, char8, char9 } =
+    req.body;
+
+  const { id } = req.params;
+
+  try {
+    const [result] = await pool.query(
+      `
+        UPDATE products_characteristics SET
+          char1 = ?, char2 = ?, char3 = ?, char4 = ?, char5 = ?,
+          char6 = ?, char7 = ?, char8 = ?, char9 = ?
+        WHERE id = ?
+      `,
+      [char1, char2, char3, char4, char5, char6, char7, char8, char9, id]
+    );
+
+    if (result.affectedRows > 0) {
+      res.json({ message: "Характеристики успешно обновлены" });
+    } else {
+      res.status(404).json({ message: "Характеристика не найдена" });
+    }
+  } catch (error) {
+    console.error("Ошибка при обновлении характеристик:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
 app.get("/characteristics/:id", async (req, res) => {
   const { id } = req.params;
 

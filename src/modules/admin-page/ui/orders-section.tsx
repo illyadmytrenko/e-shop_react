@@ -10,7 +10,7 @@ interface OrdersSectionProps {
   editedOrders: { [key: string]: Order };
   handleChange: (
     id: number,
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field: keyof Product | keyof Order | keyof UserInfo | string,
     value: string | number
   ) => void;
   handleSave: (id: number) => void;

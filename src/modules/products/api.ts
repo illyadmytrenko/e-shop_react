@@ -105,6 +105,17 @@ export const productsCharacteristicsApi = baseApi.injectEndpoints({
         return ProductCharacteristicsDtoSchema.parse(result);
       },
     }),
+    updateCharacteristics: create.mutation<
+      ProductCharacteristics,
+      { id: number; data: Partial<ProductCharacteristics> }
+    >({
+      query: ({ id, data }) => ({
+        url: `/characteristics/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Products"],
+    }),
   }),
   overrideExisting: true,
 });

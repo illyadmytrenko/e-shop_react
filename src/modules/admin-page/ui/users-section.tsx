@@ -10,11 +10,11 @@ interface UsersSectionProps {
   editedUsers: { [key: number]: UserInfo };
   handleChange?: (
     id: number,
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field: keyof Product | keyof Order | keyof UserInfo | string,
     value: string | number
   ) => void;
   handleNewChange?: (
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field: keyof Product | keyof Order | keyof UserInfo | string,
     value: string | number
   ) => void;
   handleSave: (id: number) => void;

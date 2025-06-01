@@ -1,19 +1,35 @@
 import { CustomInput } from "@/common/components/custom-input/custom-input";
 import { Order } from "@/common/types/order";
 import { Product } from "@/common/types/product";
+import { ProductCharacteristics } from "@/common/types/product-characteristics";
 import { UserInfo } from "@/common/types/user-info";
 
 interface AdminInputProps {
-  name: keyof Product | keyof Order | keyof UserInfo;
+  name:
+    | keyof Product
+    | keyof Order
+    | keyof UserInfo
+    | keyof ProductCharacteristics
+    | string;
   type: string;
   value: string | number;
   handleChange?: (
     id: number,
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field:
+      | keyof Product
+      | keyof Order
+      | keyof UserInfo
+      | keyof ProductCharacteristics
+      | string,
     value: string | number
   ) => void;
   handleNewChange?: (
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field:
+      | keyof Product
+      | keyof Order
+      | keyof UserInfo
+      | keyof ProductCharacteristics
+      | string,
     value: string | number
   ) => void;
   id?: number;
@@ -45,7 +61,7 @@ export function AdminInput({
 
   return (
     <CustomInput
-      name={name}
+      name={name as string}
       type={type}
       value={value}
       id={inputId}

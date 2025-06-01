@@ -12,11 +12,12 @@ import { UsersSection } from "./ui/users-section";
 import { OrdersSection } from "./ui/orders-section";
 import { OrdersStatsChart } from "./ui/orders-stats-chart";
 import { MoneyAmountStatsChart } from "./ui/money-amount-stats-chart";
+import { ProductCharacteristics } from "@/common/types/product-characteristics";
 
 export default function AdminPage() {
   const { data: products, isLoading: productsLoading } =
     productsApi.useGetProductsQuery();
-  const { isLoading: characteristicsLoading } =
+  const { data: productsCharacteristics, isLoading: characteristicsLoading } =
     productsCharacteristicsApi.useGetCharacteristicsQuery();
 
   const { data: users, isLoading: usersLoading } = userApi.useGetUsersQuery();
@@ -30,6 +31,9 @@ export default function AdminPage() {
   const [createProduct] = productsApi.useAddProductMutation();
   const [updateProduct] = productsApi.useUpdateProductMutation();
   const [deleteProduct] = productsApi.useDeleteProductMutation();
+
+  const [updateCharacteristics] =
+    productsCharacteristicsApi.useUpdateCharacteristicsMutation();
 
   const [updateUser] = userApi.useUpdateUserMutation();
   const [deleteUser] = userApi.useDeleteUserMutation();
@@ -53,9 +57,14 @@ export default function AdminPage() {
   }, [maxId]);
 
   const [editedProducts, setEditedProducts] = useState<{
-    [key: number]: Product;
+    [key: number]: Product & {
+      characteristics?: Record<string, string | number>;
+    };
   }>({});
-  const [newProduct, setNewProduct] = useState<Product>({
+
+  const [newProduct, setNewProduct] = useState<
+    Product & { characteristics?: Record<string, string | number> }
+  >({
     id: maxId + 1,
     name: "",
     description: "",
@@ -67,6 +76,7 @@ export default function AdminPage() {
     sellsAmount: 0,
     color: "",
     image: "",
+    characteristics: {},
   });
 
   const [editedUsers, setEditedUsers] = useState<{
@@ -79,22 +89,45 @@ export default function AdminPage() {
 
   const handleChangeProducts = (
     id: number,
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field:
+      | keyof Product
+      | keyof Order
+      | keyof UserInfo
+      | keyof ProductCharacteristics
+      | string,
     value: string | number
   ) => {
+    const isCustomField = ![
+      "id",
+      "name",
+      "description",
+      "price",
+      "category",
+      "brand",
+      "releaseDate",
+      "rating",
+      "sellsAmount",
+      "color",
+      "image",
+    ].includes(field);
+
     setEditedProducts((prev) => ({
       ...prev,
       [id]: {
         ...products?.find((p) => p.id === id),
         ...prev[id],
-        [field]: value,
+        ...(isCustomField
+          ? {
+              characteristics: { ...prev[id]?.characteristics, [field]: value },
+            }
+          : { [field]: value }),
       },
     }));
   };
 
   const handleChangeUsers = (
     id: number,
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field: keyof Product | keyof Order | keyof UserInfo | string,
     value: string | number
   ) => {
     setEditedUsers((prev) => ({
@@ -109,7 +142,7 @@ export default function AdminPage() {
 
   const handleChangeOrders = (
     id: number,
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field: keyof Product | keyof Order | keyof UserInfo | string,
     value: string | number
   ) => {
     setEditedOrders((prev) => ({
@@ -123,9 +156,24 @@ export default function AdminPage() {
   };
 
   const handleSaveProduct = async (id: number) => {
-    if (!editedProducts[id]) return;
+    const edited = editedProducts[id];
+    if (!edited) return;
 
-    await updateProduct({ id, data: editedProducts[id] });
+    await updateProduct({ id, data: edited });
+
+    if (edited.characteristics) {
+      const characteristics = productsCharacteristics?.find(
+        (char) => char.productId === id
+      );
+
+      if (characteristics) {
+        await updateCharacteristics({
+          id: characteristics.id,
+          data: edited.characteristics,
+        });
+      }
+    }
+
     setEditedProducts((prev) => {
       const updatedState = { ...prev };
       delete updatedState[id];
@@ -156,12 +204,38 @@ export default function AdminPage() {
   };
 
   const handleNewChangeProducts = (
-    field: keyof Product | keyof Order | keyof UserInfo,
+    field:
+      | keyof Product
+      | keyof Order
+      | keyof UserInfo
+      | keyof ProductCharacteristics
+      | string,
     value: string | number
   ) => {
+    const isCustomField = ![
+      "id",
+      "name",
+      "description",
+      "price",
+      "category",
+      "brand",
+      "releaseDate",
+      "rating",
+      "sellsAmount",
+      "color",
+      "image",
+    ].includes(field);
+
     setNewProduct((prev) => ({
       ...prev,
-      [field]: value,
+      ...(isCustomField
+        ? {
+            characteristics: {
+              ...prev.characteristics,
+              [field]: value,
+            },
+          }
+        : { [field]: value }),
     }));
   };
 
