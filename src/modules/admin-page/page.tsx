@@ -286,6 +286,7 @@ export default function AdminPage() {
         color: "",
         image: "",
       });
+      window.location.reload();
     } catch (error) {
       console.error("Error adding product:", error);
     }

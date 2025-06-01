@@ -76,16 +76,18 @@ export function ProductInfoLayout({
               height={340}
             />
           </a>
-          {images.slice(1).map((image, index) => (
-            <a key={index} href={image}>
-              <CustomImage
-                src={image}
-                alt={product.name}
-                width={100}
-                height={100}
-              />
-            </a>
-          ))}
+          <div className="flex">
+            {images.slice(1).map((image, index) => (
+              <a key={index} href={image}>
+                <CustomImage
+                  src={image}
+                  alt={product.name}
+                  width={120}
+                  height={120}
+                />
+              </a>
+            ))}
+          </div>
         </LightGallery>
         <div>
           <div className="mb-6">
