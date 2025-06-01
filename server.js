@@ -196,6 +196,7 @@ app.post("/products-characteristics", async (req, res) => {
 
   try {
     const allowedFields = [
+      "brand",
       "char1",
       "char2",
       "char3",
