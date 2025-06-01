@@ -18,17 +18,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.use(
   cors({
-    origin: "https://rainbow-duckanoo-f31b80.netlify.app",
-    credentials: true,
+    origin: [
+      "http://localhost:5173",
+      "https://rainbow-duckanoo-f31b80.netlify.app",
+    ],
   })
 );
-
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   })
-// );
 
 app.use(express.json());
 
