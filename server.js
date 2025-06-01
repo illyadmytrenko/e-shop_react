@@ -214,12 +214,15 @@ app.post("/products-characteristics", async (req, res) => {
       values.push(characteristics[field] ?? null);
     }
 
+    console.log("FIELDS:", fields);
+    console.log("VALUES:", values);
+
     await pool.query(
       `
       INSERT INTO products_characteristics (id, productId, ${fields.join(", ")})
-      VALUES (?, ${fields.map(() => "?").join(", ")})
+      VALUES (?, ?, ${fields.map(() => "?").join(", ")})
     `,
-      [productId, ...values]
+      [productI, productId, ...values]
     );
 
     res.status(201).json({ success: true });
