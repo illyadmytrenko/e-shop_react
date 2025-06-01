@@ -219,7 +219,7 @@ app.post("/products-characteristics", async (req, res) => {
       INSERT INTO products_characteristics (id, productId, ${fields.join(", ")})
       VALUES (?, ${fields.map(() => "?").join(", ")})
     `,
-      [productId, productId, ...values]
+      [productId, ...values]
     );
 
     res.status(201).json({ success: true });
