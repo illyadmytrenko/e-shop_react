@@ -204,7 +204,6 @@ app.post("/products-characteristics", async (req, res) => {
       "char6",
       "char7",
       "char8",
-      "char9",
     ];
 
     const fields = [];
@@ -242,7 +241,6 @@ app.put("/characteristics/:id", async (req, res) => {
     "char6",
     "char7",
     "char8",
-    "char9",
   ];
 
   const fields = [];
