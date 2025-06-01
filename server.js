@@ -181,6 +181,55 @@ app.get("/characteristics", async (req, res) => {
   }
 });
 
+app.post("/products-characteristics", async (req, res) => {
+  const { productId, characteristics } = req.body;
+
+  if (
+    !productId ||
+    typeof characteristics !== "object" ||
+    Array.isArray(characteristics)
+  ) {
+    return res
+      .status(400)
+      .json({ error: "productId and characteristics are required" });
+  }
+
+  try {
+    const allowedFields = [
+      "char1",
+      "char2",
+      "char3",
+      "char4",
+      "char5",
+      "char6",
+      "char7",
+      "char8",
+      "char9",
+    ];
+
+    const fields = [];
+    const values = [];
+
+    for (const field of allowedFields) {
+      fields.push(field);
+      values.push(characteristics[field] ?? null);
+    }
+
+    await pool.query(
+      `
+      INSERT INTO products_characteristics (productId, ${fields.join(", ")})
+      VALUES (?, ${fields.map(() => "?").join(", ")})
+    `,
+      [productId, ...values]
+    );
+
+    res.status(201).json({ success: true });
+  } catch (error) {
+    console.error("Ошибка при добавлении характеристик:", error);
+    res.status(500).json({ error: "Ошибка при добавлении характеристик" });
+  }
+});
+
 app.put("/characteristics/:id", async (req, res) => {
   const { id } = req.params;
 

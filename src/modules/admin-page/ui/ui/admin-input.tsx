@@ -33,9 +33,10 @@ interface AdminInputProps {
     value: string | number
   ) => void;
   id?: number;
+  stringId?: string;
   inputId?: string;
   className?: string;
-  isEditable?: boolean;
+  isReadOnly?: boolean;
 }
 
 export function AdminInput({
@@ -47,7 +48,7 @@ export function AdminInput({
   id = 0,
   inputId,
   className = "",
-  isEditable = true,
+  isReadOnly = false,
 }: AdminInputProps) {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,7 +68,7 @@ export function AdminInput({
       id={inputId}
       onChange={handleInputChange}
       className={`p-2 bg-lime-700 border-2 border-solid border-gray-400 rounded-md ${className}`}
-      isEditable={isEditable}
+      isReadOnly={isReadOnly}
     />
   );
 }

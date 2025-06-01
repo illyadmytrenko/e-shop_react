@@ -25,7 +25,10 @@ export function TechnicalDetails({
       <table className="text-left mb-6 md:mb-8 text-gray-500 w-full md:w-2/3">
         <tbody>
           {Object.entries(productCharacteristics)
-            .filter(([key]) => key !== "id" && key !== "productId")
+            .filter(
+              ([key, value]) =>
+                key !== "id" && key !== "productId" && value !== ""
+            )
             .map(([key, value], index) => (
               <tr
                 key={key}

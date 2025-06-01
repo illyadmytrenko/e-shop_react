@@ -16,7 +16,7 @@ interface CustomInputProps {
   itemBefore?: ReactNode;
   itemAfter?: ReactNode;
   checked?: boolean;
-  isEditable?: boolean;
+  isReadOnly?: boolean;
 }
 
 export function CustomInput({
@@ -32,7 +32,7 @@ export function CustomInput({
   itemBefore,
   itemAfter,
   checked = false,
-  isEditable = true,
+  isReadOnly = false,
 }: CustomInputProps) {
   return (
     <div className={clsx("flex flex-col relative", classNameDiv)}>
@@ -49,7 +49,7 @@ export function CustomInput({
           error && "border-red-500"
         )}
         checked={checked}
-        disabled={!isEditable}
+        readOnly={isReadOnly}
       />
       {error && (
         <p className="text-red-500 text-sm font-bold pl-2 mt-1">{error}</p>

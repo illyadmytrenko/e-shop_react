@@ -77,10 +77,8 @@ export function ProductsSection({
     id?: number,
     isNew: boolean = false
   ) => {
-    const currentCategory = useMemo(
-      () =>
-        FilterCategories.find((category) => category.name === product.category),
-      [product.category]
+    const currentCategory = FilterCategories.find(
+      (category) => category.name === product.category
     );
 
     const baseInputs = productFields.map((field) => (
@@ -208,7 +206,7 @@ export function ProductsSection({
         })}
       </ul>
       <div>
-        <div className="grid grid-cols-6 gap-5 mb-5">
+        <div className="flex gap-5 mb-5 pb-1 items-center overflow-x-auto">
           {renderInputs(newProduct, undefined, true)}
         </div>
         <CustomButton

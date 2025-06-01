@@ -32,6 +32,8 @@ export default function AdminPage() {
   const [updateProduct] = productsApi.useUpdateProductMutation();
   const [deleteProduct] = productsApi.useDeleteProductMutation();
 
+  const [createCharacteristics] =
+    productsCharacteristicsApi.useCreateCharacteristicsMutation();
   const [updateCharacteristics] =
     productsCharacteristicsApi.useUpdateCharacteristicsMutation();
 
@@ -227,27 +229,50 @@ export default function AdminPage() {
       "image",
     ].includes(field);
 
-    setNewProduct((prev) => ({
-      ...prev,
-      ...(isCustomField
-        ? {
-            characteristics: {
-              ...prev.characteristics,
-              [field]: value,
-            },
-          }
-        : { [field]: value }),
-    }));
+    setNewProduct((prev) => {
+      if (field === "category") {
+        return {
+          ...prev,
+          category: value as string,
+          characteristics: {},
+        };
+      }
+
+      return {
+        ...prev,
+        ...(isCustomField
+          ? {
+              characteristics: {
+                ...prev.characteristics,
+                [field]: value,
+              },
+            }
+          : { [field]: value }),
+      };
+    });
   };
 
   const handleAddProduct = async () => {
-    if (!newProduct.name || !newProduct.price) {
-      alert("Название и цена обязательны!");
-      return;
-    }
-
     try {
-      await createProduct(newProduct).unwrap();
+      await createProduct(newProduct);
+      if (newProduct.characteristics) {
+        await createCharacteristics({
+          productId: newProduct.id,
+          characteristics: {
+            id: newProduct.id,
+            productId: newProduct.id,
+            brand: newProduct.brand,
+            char1: (newProduct.characteristics.char1 as string) ?? "",
+            char2: (newProduct.characteristics.char2 as string) ?? "",
+            char3: (newProduct.characteristics.char3 as string) ?? "",
+            char4: (newProduct.characteristics.char4 as string) ?? "",
+            char5: (newProduct.characteristics.char5 as string) ?? "",
+            char6: (newProduct.characteristics.char6 as string) ?? "",
+            char7: (newProduct.characteristics.char7 as string) ?? "",
+            char8: (newProduct.characteristics.char8 as string) ?? "",
+          },
+        });
+      }
       setNewProduct({
         id: maxId + 1,
         name: "",
@@ -262,7 +287,7 @@ export default function AdminPage() {
         image: "",
       });
     } catch (error) {
-      console.error("Ошибка при добавлении товара:", error);
+      console.error("Error adding product:", error);
     }
   };
 

@@ -25,10 +25,10 @@ const userFields: {
   name: keyof UserInfo;
   label: string;
   type: "text";
-  isEditable?: boolean;
+  isReadOnly?: boolean;
 }[] = [
-  { name: "userName", label: "Name", type: "text", isEditable: false },
-  { name: "userEmail", label: "Email", type: "text", isEditable: false },
+  { name: "userName", label: "Name", type: "text", isReadOnly: true },
+  { name: "userEmail", label: "Email", type: "text", isReadOnly: true },
   { name: "userBonusPoints", label: "Bonus Points", type: "text" },
   { name: "userDiscount", label: "Discount", type: "text" },
 ];
@@ -59,6 +59,7 @@ export function UsersSection({
           {...(isNew
             ? { handleNewChange }
             : { handleChange, id: id as number })}
+          isReadOnly={field.isReadOnly}
         />
       </div>
     ));

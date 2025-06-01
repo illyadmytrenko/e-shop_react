@@ -105,6 +105,17 @@ export const productsCharacteristicsApi = baseApi.injectEndpoints({
         return ProductCharacteristicsDtoSchema.parse(result);
       },
     }),
+    createCharacteristics: create.mutation<
+      void,
+      { productId: number; characteristics: ProductCharacteristics }
+    >({
+      query: ({ productId, characteristics }) => ({
+        url: `/products-characteristics`,
+        method: "POST",
+        body: { productId, characteristics },
+      }),
+    }),
+
     updateCharacteristics: create.mutation<
       ProductCharacteristics,
       { id: number; data: Partial<ProductCharacteristics> }

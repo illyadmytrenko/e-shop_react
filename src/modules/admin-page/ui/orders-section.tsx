@@ -20,13 +20,13 @@ interface OrdersSectionProps {
 const orderFields: {
   name: keyof Order;
   label: string;
-  isEditable?: boolean;
+  isReadOnly?: boolean;
 }[] = [
-  { name: "orderId", label: "Order Id", isEditable: false },
-  { name: "orderDate", label: "Order Date", isEditable: false },
-  { name: "userName", label: "User Name", isEditable: false },
-  { name: "userPhoneNumber", label: "User Phone Number", isEditable: false },
-  { name: "userAddress", label: "User Address", isEditable: false },
+  { name: "orderId", label: "Order Id", isReadOnly: true },
+  { name: "orderDate", label: "Order Date", isReadOnly: true },
+  { name: "userName", label: "User Name", isReadOnly: true },
+  { name: "userPhoneNumber", label: "User Phone Number", isReadOnly: true },
+  { name: "userAddress", label: "User Address", isReadOnly: true },
   { name: "orderStatus", label: "Order Status" },
 ];
 
@@ -39,7 +39,7 @@ export function OrdersSection({
   deleteOrder,
 }: OrdersSectionProps) {
   const renderInputs = (order: Order) =>
-    orderFields.map(({ name, label, isEditable }) => {
+    orderFields.map(({ name, label, isReadOnly }) => {
       return (
         <div key={name}>
           <label
@@ -52,9 +52,11 @@ export function OrdersSection({
             name={name}
             type="text"
             value={order[name] ?? ""}
+            id={Number(order.orderId)}
+            stringId={order.orderId}
             inputId={`${name}${order.orderId ?? 0}`}
             handleChange={handleChange}
-            isEditable={isEditable}
+            isReadOnly={isReadOnly}
           />
         </div>
       );
@@ -73,7 +75,7 @@ export function OrdersSection({
               key={order.orderId}
               className="border-2 border-solid border-black rounded-md p-3"
             >
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5 mb-5 items-center">
+              <div className="flex gap-5 mb-5 pb-1 items-center overflow-x-auto">
                 {renderInputs(editedOrder)}
               </div>
               <div className="flex gap-12">
