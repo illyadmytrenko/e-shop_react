@@ -172,6 +172,7 @@ export default function AdminPage() {
           data: edited.characteristics,
         });
       }
+      window.location.reload();
     }
 
     setEditedProducts((prev) => {

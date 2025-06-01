@@ -182,20 +182,40 @@ app.get("/characteristics", async (req, res) => {
 });
 
 app.put("/characteristics/:id", async (req, res) => {
-  const { char1, char2, char3, char4, char5, char6, char7, char8, char9 } =
-    req.body;
-
   const { id } = req.params;
+
+  const allowedFields = [
+    "char1",
+    "char2",
+    "char3",
+    "char4",
+    "char5",
+    "char6",
+    "char7",
+    "char8",
+    "char9",
+  ];
+
+  const fields = [];
+  const values = [];
+
+  for (const field of allowedFields) {
+    if (req.body[field] !== undefined) {
+      fields.push(`${field} = ?`);
+      values.push(req.body[field]);
+    }
+  }
+
+  if (fields.length === 0) {
+    return res.status(400).json({ message: "Нет полей для обновления" });
+  }
+
+  values.push(id);
 
   try {
     const [result] = await pool.query(
-      `
-        UPDATE products_characteristics SET
-          char1 = ?, char2 = ?, char3 = ?, char4 = ?, char5 = ?,
-          char6 = ?, char7 = ?, char8 = ?, char9 = ?
-        WHERE id = ?
-      `,
-      [char1, char2, char3, char4, char5, char6, char7, char8, char9, id]
+      `UPDATE products_characteristics SET ${fields.join(", ")} WHERE id = ?`,
+      values
     );
 
     if (result.affectedRows > 0) {
