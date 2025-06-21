@@ -32,7 +32,7 @@ export function CustomButton({
   isDropdownOpen,
 }: CustomButtonProps) {
   const buttonClassName = clsx(
-    "transition-all duration-150 ease-in-out",
+    "transition-all duration-150 ease-in-out cursor-pointer",
     className,
     {
       sm: "rounded px-4 sm:px-6 py-2",
